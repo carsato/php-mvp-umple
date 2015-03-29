@@ -1,0 +1,31 @@
+class MVP
+{
+   status {
+      Listening {
+        entry/{doEntryA();}
+        entry/{doEntryB();}
+        exit/ {doExit();}
+        request -> Requested;
+
+      }
+      Requested {
+          processRequest -> View;
+          returnRequest -> Listening;
+      }
+      View {
+        entry/{
+          $view = New View();
+        }
+        notify -> Presenter;
+        display ->  Requested;
+      }
+      Presenter {
+          updateModel -> Model;
+          updateView -> View;
+          getData -> Model;
+      }
+      Model {
+      }
+  }
+}
+

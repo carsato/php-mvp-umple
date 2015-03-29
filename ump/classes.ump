@@ -1,0 +1,9 @@
+class MVP{
+  lazy view;
+}
+
+class Model{
+}
+
+class Presenter{
+}
