@@ -1,31 +1,70 @@
+//<?php
+
 class MVP
 {
-   status {
-      Listening {
-        entry/{doEntryA();}
-        entry/{doEntryB();}
-        exit/ {doExit();}
-        request -> Requested;
+  lazy modules;
+  status {
+    Listening {
+      entry/{
+        print __function__.' '.$this->status.'<br />';
+      }
 
+      exit/{
+        print __function__.' '.$this->status.'<br />';
       }
-      Requested {
-          processRequest -> View;
-          returnRequest -> Listening;
+      run ->  Requested;
+    }
+    Requested {
+      entry/{
+        print __function__.' '.$this->status.'<br />';
+        $this->modules = $this->getModulesList();
+        $this->callViews();
       }
-      View {
-        entry/{
-          $view = New View();
-        }
-        notify -> Presenter;
-        display ->  Requested;
+      processRequest -> View;
+      returnRequest -> Listening;
+    }
+    View {
+      entry/{
+        print __function__.' '.$this->status.'<br />';
+        $view = New View();
       }
-      Presenter {
-          updateModel -> Model;
-          updateView -> View;
-          getData -> Model;
+      notify -> Presenter;
+      display ->  Requested;
+    }
+    Presenter {
+      entry/{
+        print __function__.' '.$this->status.'<br />';
       }
-      Model {
+      updateModel -> Model;
+      updateView -> View;
+      getData -> Model;
+    }
+    Model {
+      entry/{
+        print __function__.' '.$this->status.'<br />';
       }
+    }
+  }
+
+  public function getModulesList(){
+    $this->modules = array();
+    foreach(glob(dirname(__file__)."/../modules/*/config/config.php") as $module){
+    // foreach(glob(dirname(__file__)."/../modules/*/Module.php") as $module){
+      print $module;
+      $moduleContents = include $module;
+      $this->modules[] = $moduleContents;
+    }
+    return $this->modules;
+  }
+
+  public function callViews(){
+    print '<pre>'.print_r($this->modules,true).'</pre>';
+    foreach($this->modules as $module){
+      include dirname(__file__).'/../modules/'.$module['name'].'/view/'.$module['view'].'.php';
+      $view = New $module['view'];
+      $view->view();
+    }
   }
 }
+
 
