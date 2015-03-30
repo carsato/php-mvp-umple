@@ -9,7 +9,7 @@ Umple is an open source project, so details will evolve. However, it is ready to
 # MVP
 
 MVP stands for Model View Presenter.
-I'm building a simple MVP with umple just to try.
+I'm building a simple MVP with Umple (Umple.org) just to try.
 
 
 # Compile instructions
