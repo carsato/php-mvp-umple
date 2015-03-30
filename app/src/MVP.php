@@ -13,6 +13,7 @@ class MVP
   //MVP Attributes
   private $view;
   private $modules;
+  private $views;
 
   //MVP State Machines
   private static $StatusListening = 1;
@@ -30,6 +31,7 @@ class MVP
   {
     $this->view = NULL;
     $this->modules = NULL;
+    $this->views = NULL;
     $this->setStatus(self::$StatusListening);
   }
 
@@ -53,6 +55,14 @@ class MVP
     return $wasSet;
   }
 
+  public function setViews($aViews)
+  {
+    $wasSet = false;
+    $this->views = $aViews;
+    $wasSet = true;
+    return $wasSet;
+  }
+
   public function getView()
   {
     return $this->view;
@@ -61,6 +71,11 @@ class MVP
   public function getModules()
   {
     return $this->modules;
+  }
+
+  public function getViews()
+  {
+    return $this->views;
   }
 
   public function getStatusFullName()
@@ -188,7 +203,7 @@ class MVP
   {
     if ($this->status == self::$StatusListening)
     {
-      print __function__.' '.$this->status.'<br />';
+      // print __function__.' '.$this->status.'<br />';
     }
   }
 
@@ -199,26 +214,26 @@ class MVP
     // entry actions and do activities
     if ($this->status == self::$StatusListening)
     {
-      print __function__.' '.$this->status.'<br />';
+      // print __function__.' '.$this->status.'<br />';
     }
     elseif ($this->status == self::$StatusRequested)
     {
-      print __function__.' '.$this->status.'<br />';
+      // print __function__.' '.$this->status.'<br />';
         $this->modules = $this->getModulesList();
         $this->callViews();
     }
     elseif ($this->status == self::$StatusView)
     {
-      print __function__.' '.$this->status.'<br />';
+      // print __function__.' '.$this->status.'<br />';
         $view = New View();
     }
     elseif ($this->status == self::$StatusPresenter)
     {
-      print __function__.' '.$this->status.'<br />';
+      // print __function__.' '.$this->status.'<br />';
     }
     elseif ($this->status == self::$StatusModel)
     {
-      print __function__.' '.$this->status.'<br />';
+      // print __function__.' '.$this->status.'<br />';
     }
   }
 
@@ -235,7 +250,7 @@ class MVP
     $this->modules = array();
     foreach(glob(dirname(__file__)."/../modules/*/config/config.php") as $module){
     // foreach(glob(dirname(__file__)."/../modules/*/Module.php") as $module){
-      print $module;
+      // print $module;
       $moduleContents = include $module;
       $this->modules[] = $moduleContents;
     }
@@ -244,12 +259,14 @@ class MVP
 
    public function callViews()
   {
-    print '<pre>'.print_r($this->modules,true).'</pre>';
+    // print '<pre>'.print_r($this->modules,true).'</pre>';
+    $this->views = array();
     foreach($this->modules as $module){
       include dirname(__file__).'/../modules/'.$module['name'].'/view/'.$module['view'].'.php';
       $view = New $module['view'];
-      $view->view();
+      $this->views[] = $view->view();
     }
+    var_dump($this->views);
   }
 
 }

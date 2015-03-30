@@ -11,8 +11,7 @@ include dirname(__file__).'/src/MVP.php';
 // print '<pre>'.print_r(get_declared_classes(),true).'</pre>';
 $mvp = New MVP();
 $mvp->run();
-$mvp->getModulesList();
-print_r($mvp->getModules());
+// print_r($mvp->getModules());
 // print '<pre>'.print_r(get_declared_classes(),true).'</pre>';
 
 // $app = New Application();

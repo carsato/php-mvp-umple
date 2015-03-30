@@ -19,20 +19,21 @@ generate Php;
 class MVP
 {
   lazy modules;
+  lazy views;
   status {
     Listening {
       entry/{
-        print __function__.' '.$this->status.'<br />';
+        // print __function__.' '.$this->status.'<br />';
       }
 
       exit/{
-        print __function__.' '.$this->status.'<br />';
+        // print __function__.' '.$this->status.'<br />';
       }
       run ->  Requested;
     }
     Requested {
       entry/{
-        print __function__.' '.$this->status.'<br />';
+        // print __function__.' '.$this->status.'<br />';
         $this->modules = $this->getModulesList();
         $this->callViews();
       }
@@ -41,7 +42,7 @@ class MVP
     }
     View {
       entry/{
-        print __function__.' '.$this->status.'<br />';
+        // print __function__.' '.$this->status.'<br />';
         $view = New View();
       }
       notify -> Presenter;
@@ -49,7 +50,7 @@ class MVP
     }
     Presenter {
       entry/{
-        print __function__.' '.$this->status.'<br />';
+        // print __function__.' '.$this->status.'<br />';
       }
       updateModel -> Model;
       updateView -> View;
@@ -57,7 +58,7 @@ class MVP
     }
     Model {
       entry/{
-        print __function__.' '.$this->status.'<br />';
+        // print __function__.' '.$this->status.'<br />';
       }
     }
   }
@@ -66,7 +67,7 @@ class MVP
     $this->modules = array();
     foreach(glob(dirname(__file__)."/../modules/*/config/config.php") as $module){
     // foreach(glob(dirname(__file__)."/../modules/*/Module.php") as $module){
-      print $module;
+      // print $module;
       $moduleContents = include $module;
       $this->modules[] = $moduleContents;
     }
@@ -74,12 +75,14 @@ class MVP
   }
 
   public function callViews(){
-    print '<pre>'.print_r($this->modules,true).'</pre>';
+    // print '<pre>'.print_r($this->modules,true).'</pre>';
+    $this->views = array();
     foreach($this->modules as $module){
       include dirname(__file__).'/../modules/'.$module['name'].'/view/'.$module['view'].'.php';
       $view = New $module['view'];
-      $view->view();
+      $this->views[] = $view->view();
     }
+    var_dump($this->views);
   }
 }
 
