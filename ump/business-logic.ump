@@ -66,7 +66,44 @@ class MVP
       $view = New $module['view'];
       $this->views[] = $view->view();
     }
-    var_dump($this->views);
+    $pre_render = '<pre>'.print_r($this->views,true).'</pre>';
+    print $this->render($this->views);
+    $post_render = '<pre>'.print_r($this->views,true).'</pre>';
+    // print $pre_render.$post_render;
+    // print '<pre>'.print_r($this->views,true).'</pre>';
+    // print '<pre>'.print_r($this->render($this->views),true).'</pre>';
+  }
+
+  public function render(&$element){
+    if(!isset($element['#markup'])){
+      if(is_array($element)){
+        foreach($this->children_elements($element) as $key => $children){
+          $this->render($element[$key]);
+          if(isset($element[$key]['#markup'])){
+            $element['#markup'][] = $element[$key]['#markup'];
+          }
+          else{
+            $element['#markup'][] = $this->render($element[$key]);
+          }
+        }
+        $element['#markup'] = implode(' ',$element['#markup']);
+      }
+      else{
+        return $element;
+      }
+    }
+    return $element['#markup'];
+  }
+
+  public function children_elements($elements){
+    $children = array();
+    foreach($elements as $key => $element){
+      $padSimbolPos = strpos($key, '#');
+      if($padSimbolPos === false || $padSimbolPos > 0){
+        $children[$key] = $element;
+      }
+    }
+    return $children;
   }
 }
 
