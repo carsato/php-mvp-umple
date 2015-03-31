@@ -5,12 +5,13 @@ use StampTemplateEngine\StampTE as StampTE;
 class SystemView{
   public function view(){
     return array(
-      '#render' => array(
+      'a_render' => array(
+        '#render' => true,
         '#module' => 'system',
         '#view'   => 'SystemView',
         '#method' => 'stampteRender',
         '#args' => array(
-          'template' => " <table>
+          'template' => "<table>
                               <thead>
                                   <tr><th>Pizza</th><th>Price</th></tr>
                               </thead>
@@ -39,6 +40,9 @@ class SystemView{
         ),
       ),
     );
+  }
+  public function basicRender($string){
+    return $string;
   }
 
   public function stampteRender(){

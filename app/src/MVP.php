@@ -263,14 +263,14 @@ class MVP
     foreach($this->modules as $module){
       include dirname(__file__).'/../modules/'.$module['name'].'/view/'.$module['view'].'.php';
       $view = New $module['view'];
-      $this->views[] = $view->view();
+      $this->views = array_merge($this->views, $view->view());
     }
+
+
     $pre_render = '<pre>'.print_r($this->views,true).'</pre>';
     print $this->render($this->views);
-    $post_render = '<pre>'.print_r($this->views,true).'</pre>';
-    // print $pre_render.$post_render;
-    // print '<pre>'.print_r($this->views,true).'</pre>';
-    // print '<pre>'.print_r($this->render($this->views),true).'</pre>';
+    $post_render = $this->views;
+    $this->_log($post_render);
   }
 
   //------------------------
@@ -282,39 +282,48 @@ class MVP
   {
     if(!isset($element['#markup'])){
       if(is_array($element)){
+        $element['#markup'] = array();
         foreach($this->children_elements($element) as $key => $children){
           $this->render($element[$key]);
-          if(isset($element[$key]['#markup'])){
+          if(isset($element[$key]['#render'])){
+            $render = $element[$key];
+            $file = dirname(__file__).'/../modules/'.$render['#module'].'/view/'.$render['#view'].'.php';
+            require_once $file;
+            $view = New $render['#view'];
+            $element[$key]['#markup'] = $view->{$render['#method']}($render['#args']);
+          }
+          elseif(!isset($element[$key]['#markup'])){
+            if(is_array($element[$key])){
+              $element[$key]['#markup'] = $this->render($element[$key]);
+            }
+          }
+          if(is_array($element[$key])){
             $element['#markup'][] = $element[$key]['#markup'];
           }
           else{
-            if(!isset($element['#render'])){
-              $element['#markup'][] = $this->render($element[$key]);
-            }
-            else{
-              // print_r($element);
-            }
+            $element['#markup'][] = $element[$key];
           }
-        }
-        if(!isset($element['#render'])){
-          $element['#markup'] = implode(' ',$element['#markup']);
-        }
-        else{
-          $render = $element['#render'];
-          $file = dirname(__file__).'/../modules/'.$render['#module'].'/view/'.$render['#view'].'.php';
-          require_once $file;
-          $view = New $render['#view'];
-          $element['#markup'] = $view->{$render['#method']}($render['#args']);
         }
       }
       else{
+        // $this->_log(__function__. ' element 2');
+        // $this->_log($element);
+        // $element = array('#markup'=>$element);
         return $element;
       }
     }
+
+
+    if(isset($element['#markup']) && is_array($element['#markup'])){
+      $element['#markup'] = implode('',$element['#markup']);
+      return $element['#markup'];
+    }
+
+
     return $element['#markup'];
   }
 
-// line 111 business-logic.ump
+// line 120 business-logic.ump
   public function children_elements ($elements) 
   {
     $children = array();
@@ -325,6 +334,14 @@ class MVP
       }
     }
     return $children;
+  }
+
+// line 131 business-logic.ump
+  public function _log ($var) 
+  {
+    if(isset($_GET['log']) && $_GET['log'] == 1){
+      print '<pre>'.print_r($var,true).'</pre>';
+    }
   }
 
 }
