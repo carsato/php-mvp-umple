@@ -63,7 +63,7 @@ class MVP
     foreach($this->modules as $module){
       include dirname(__file__).'/../modules/'.$module['name'].'/view/'.$module['view'].'.php';
       $view = New $module['view'];
-      $this->views = array_merge($this->views, $view->view());
+      $this->views = array_replace_recursive($this->views, $view->view());
     }
 
 
