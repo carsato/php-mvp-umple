@@ -41,6 +41,15 @@ class SystemView{
       ),
     );
   }
+  public function layoutRender(){
+    $template_file = dirname(__file__).'/layout.html';
+    $args = func_get_args();
+    $args = reset($args);
+    // print_r($args);
+    $args['template'] = file_get_contents($template_file);
+    $args['data'] = $args['slots'];
+    return $this->stampteLayoutRender($args);
+  }
   public function basicRender($string){
     return $string;
   }
@@ -65,6 +74,39 @@ class SystemView{
       }
       $se->add($slot);
       $se->injectAll($dat);
+    }
+
+    return (string)$se;
+
+  }
+
+  public function stampteLayoutRender(){
+    $file = dirname(__file__).'/../../../vendor/gabordemooij/stamp/StampTE.php';
+    require_once $file;
+    $args = func_get_args();
+    $args = reset($args);
+    $template = $args['template'];
+
+    $data = $args['data'];
+    $se = new StampTE($template);
+
+    // print '<br>-----------------<br>';
+    // print '<pre>'.print_r(htmlentities($template),true).'</pre>';
+
+    //render slots
+    foreach($data as $key => $dat){
+      try{
+        if(isset($dat['#markup'])){
+          $d = array($key => $dat['#markup']);
+          $slot = $se->get($key);
+          $se->add($slot);
+          $se->injectAll($d,true);
+        }
+      }
+      catch(Exception $e){
+
+      }
+
     }
 
     return (string)$se;
