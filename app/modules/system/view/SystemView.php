@@ -1,11 +1,12 @@
 <?php
 
+use StampTemplateEngine\StampTE as StampTE;
 
 class SystemView{
   public function view(){
     return array(
       '#render' => array(
-        '#module' => 'System',
+        '#module' => 'system',
         '#view'   => 'SystemView',
         '#method' => 'stampteRender',
         '#args' => array(
@@ -24,9 +25,16 @@ class SystemView{
                               </tbody>
                           </table>",
           'data' => array(
-            'Margherita' => '7.00',
-            'Funghi' => '7.50',
-            'Tonno' => '8.00',
+            array(
+              'id' => 'pizza',
+              'name' => 'Margherita',
+              'price' => '1.2',
+              ),
+            array(
+              'pizza',
+              'name' => 'Margherita',
+              'price' => '2.2',
+              ),
           ),
         ),
       ),
@@ -34,12 +42,28 @@ class SystemView{
   }
 
   public function stampteRender(){
-    require dirname(__file__).'/../../../vendor/gabordemooij/stamp/StampTE.php';
+    $file = dirname(__file__).'/../../../vendor/gabordemooij/stamp/StampTE.php';
+    require_once $file;
     $args = func_get_args();
+    $args = reset($args);
     $template = $args['template'];
+
     $data = $args['data'];
-    $tpl = new StampTE($template);
-    foreach($data as $name=>$value) {
+    $se = new StampTE($template);
+
+    //render slots
+    foreach($data as $key => $dat){
+      $slot_id = reset($dat);
+      // print_r($dat);
+      $slot = $se->get($slot_id);
+      foreach($dat as $k => $d){
+        $slot->set($k,$d);
+      }
+      $se->add($slot);
+      $se->injectAll($dat);
     }
+
+    return (string)$se;
+
   }
 }

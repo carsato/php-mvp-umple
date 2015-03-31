@@ -259,7 +259,6 @@ class MVP
 
    public function callViews()
   {
-    // print '<pre>'.print_r($this->modules,true).'</pre>';
     $this->views = array();
     foreach($this->modules as $module){
       include dirname(__file__).'/../modules/'.$module['name'].'/view/'.$module['view'].'.php';
@@ -278,7 +277,7 @@ class MVP
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 77 business-logic.ump
+  // line 76 business-logic.ump
   public function render (&$element) 
   {
     if(!isset($element['#markup'])){
@@ -289,10 +288,24 @@ class MVP
             $element['#markup'][] = $element[$key]['#markup'];
           }
           else{
-            $element['#markup'][] = $this->render($element[$key]);
+            if(!isset($element['#render'])){
+              $element['#markup'][] = $this->render($element[$key]);
+            }
+            else{
+              // print_r($element);
+            }
           }
         }
-        $element['#markup'] = implode(' ',$element['#markup']);
+        if(!isset($element['#render'])){
+          $element['#markup'] = implode(' ',$element['#markup']);
+        }
+        else{
+          $render = $element['#render'];
+          $file = dirname(__file__).'/../modules/'.$render['#module'].'/view/'.$render['#view'].'.php';
+          require_once $file;
+          $view = New $render['#view'];
+          $element['#markup'] = $view->{$render['#method']}($render['#args']);
+        }
       }
       else{
         return $element;
@@ -301,7 +314,7 @@ class MVP
     return $element['#markup'];
   }
 
-// line 98 business-logic.ump
+// line 111 business-logic.ump
   public function children_elements ($elements) 
   {
     $children = array();
