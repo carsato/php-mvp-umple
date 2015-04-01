@@ -11,7 +11,6 @@ class MVP
   //------------------------
 
   //MVP Attributes
-  private $view;
   private $modules;
   private $views;
   private $response;
@@ -30,7 +29,6 @@ class MVP
 
   public function __construct()
   {
-    $this->view = NULL;
     $this->modules = NULL;
     $this->views = NULL;
     $this->response = NULL;
@@ -40,14 +38,6 @@ class MVP
   //------------------------
   // INTERFACE
   //------------------------
-
-  public function setView($aView)
-  {
-    $wasSet = false;
-    $this->view = $aView;
-    $wasSet = true;
-    return $wasSet;
-  }
 
   public function setModules($aModules)
   {
@@ -71,11 +61,6 @@ class MVP
     $this->response = $aResponse;
     $wasSet = true;
     return $wasSet;
-  }
-
-  public function getView()
-  {
-    return $this->view;
   }
 
   public function getModules()
@@ -234,13 +219,15 @@ class MVP
     elseif ($this->status == self::$StatusRequested)
     {
       // print __function__.' '.$this->status.'<br />';
+
+        // $this->view = New View();
         $this->modules = $this->getModulesList();
         $this->callViews();
     }
     elseif ($this->status == self::$StatusView)
     {
       // print __function__.' '.$this->status.'<br />';
-        $view = New View();
+        // $view = New View();
     }
     elseif ($this->status == self::$StatusPresenter)
     {
@@ -307,7 +294,7 @@ class MVP
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 92 business-logic.ump
+  // line 94 business-logic.ump
   public function render (&$element) 
   {
     if(!isset($element['#markup'])){
@@ -353,7 +340,7 @@ class MVP
     return $element['#markup'];
   }
 
-// line 136 business-logic.ump
+// line 138 business-logic.ump
   public function children_elements ($elements) 
   {
     $children = array();
@@ -366,7 +353,7 @@ class MVP
     return $children;
   }
 
-// line 147 business-logic.ump
+// line 149 business-logic.ump
   public function _log ($var) 
   {
     if(isset($_GET['log']) && $_GET['log'] == 1){

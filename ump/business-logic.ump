@@ -19,6 +19,8 @@ class MVP
     Requested {
       entry/{
         // print __function__.' '.$this->status.'<br />';
+
+        // $this->view = New View();
         $this->modules = $this->getModulesList();
         $this->callViews();
       }
@@ -28,7 +30,7 @@ class MVP
     View {
       entry/{
         // print __function__.' '.$this->status.'<br />';
-        $view = New View();
+        // $view = New View();
       }
       notify -> Presenter;
       display ->  Requested;

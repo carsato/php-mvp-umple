@@ -1,5 +1,4 @@
 class MVP{
-  lazy view;
 }
 
 class Model{
