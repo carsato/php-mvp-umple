@@ -20,6 +20,7 @@ class MVP
 {
   lazy modules;
   lazy views;
+  lazy response;
   status {
     Listening {
       entry/{
@@ -101,7 +102,7 @@ class MVP
     $file = dirname(__file__).'/../modules/'.$render['#module'].'/view/'.$render['#view'].'.php';
     require_once $file;
     $view = New $render['#view'];
-    print $view->{$render['#method']}($render['#args']);
+    $this->response = $view->{$render['#method']}($render['#args']);
   }
 
   public function render(&$element){

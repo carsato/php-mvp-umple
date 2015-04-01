@@ -14,6 +14,7 @@ class MVP
   private $view;
   private $modules;
   private $views;
+  private $response;
 
   //MVP State Machines
   private static $StatusListening = 1;
@@ -32,6 +33,7 @@ class MVP
     $this->view = NULL;
     $this->modules = NULL;
     $this->views = NULL;
+    $this->response = NULL;
     $this->setStatus(self::$StatusListening);
   }
 
@@ -63,6 +65,14 @@ class MVP
     return $wasSet;
   }
 
+  public function setResponse($aResponse)
+  {
+    $wasSet = false;
+    $this->response = $aResponse;
+    $wasSet = true;
+    return $wasSet;
+  }
+
   public function getView()
   {
     return $this->view;
@@ -76,6 +86,11 @@ class MVP
   public function getViews()
   {
     return $this->views;
+  }
+
+  public function getResponse()
+  {
+    return $this->response;
   }
 
   public function getStatusFullName()
@@ -285,14 +300,14 @@ class MVP
     $file = dirname(__file__).'/../modules/'.$render['#module'].'/view/'.$render['#view'].'.php';
     require_once $file;
     $view = New $render['#view'];
-    print $view->{$render['#method']}($render['#args']);
+    $this->response = $view->{$render['#method']}($render['#args']);
   }
 
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 91 business-logic.ump
+  // line 92 business-logic.ump
   public function render (&$element) 
   {
     if(!isset($element['#markup'])){
@@ -338,7 +353,7 @@ class MVP
     return $element['#markup'];
   }
 
-// line 135 business-logic.ump
+// line 136 business-logic.ump
   public function children_elements ($elements) 
   {
     $children = array();
@@ -351,7 +366,7 @@ class MVP
     return $children;
   }
 
-// line 146 business-logic.ump
+// line 147 business-logic.ump
   public function _log ($var) 
   {
     if(isset($_GET['log']) && $_GET['log'] == 1){
