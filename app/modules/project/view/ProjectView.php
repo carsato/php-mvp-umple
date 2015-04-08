@@ -1,9 +1,22 @@
 <?php
 class ProjectView{
   public function view(){
+    $about = $this->viewAbout();
+
     return array(
       'about.html' => array(
         'about' => array(
+          '#render' => true,
+          '#module' => 'project',
+          '#view'   => 'ProjectView',
+          '#method' => 'viewAbout',
+        ),
+      ),
+    );
+  }
+
+  public function viewAbout(){
+    return array(
           'part1' => array(
             '#render' => true,
             '#module' => 'system',
@@ -32,8 +45,6 @@ class ProjectView{
             ),
           ),
           'subtitle' => array('This is dinamic content'),
-        ),
-      ),
     );
   }
 }

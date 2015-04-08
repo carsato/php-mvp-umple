@@ -1,16 +1,16 @@
 <?php
 /**
- * 
- *           _                                                                
- *         /' `\     /'                                         /'            
- *       /'   ._)--/'--                                     --/'--            
- *      (____    /' ____     ,__________      ____          /'          ____  
- *           ) /' /'    )   /'    )     )   /'    )--     /'          /'    ) 
- *         /'/' /'    /'  /'    /'    /'  /'    /'      /'          /(___,/'  
+ *
+ *           _
+ *         /' `\     /'                                         /'
+ *       /'   ._)--/'--                                     --/'--
+ *      (____    /' ____     ,__________      ____          /'          ____
+ *           ) /' /'    )   /'    )     )   /'    )--     /'          /'    )
+ *         /'/' /'    /'  /'    /'    /'  /'    /'      /'          /(___,/'
  *(_____,/' (__(___,/(__/'    /'    /(__/(___,/'       (__        O(________ O
- *                                    /'                                      
- *                                  /'                                        
- *                                /'                                          
+ *                                    /'
+ *                                  /'
+ *                                /'
  *
  *  ---------------------------------------------------------------------------
  *  Stamp t.e.
@@ -21,10 +21,10 @@
  *  @license New BSD License
  *  ---------------------------------------------------------------------------
  */
- 
+
 namespace StampTemplateEngine;
- 
-class StampTE 
+
+class StampTE
 {
 	/**
 	 * Clear white space gaps left by
@@ -59,23 +59,23 @@ class StampTE
 
 	/**
 	 * Identifier of current template snippet.
-	 * @var string 
+	 * @var string
 	 */
 	protected $id;
 
 	/**
 	 * A Stamp contains a sketchbook with snippets to generate new
-	 * stamps from. This way StampTE allows lazy initialization of 
+	 * stamps from. This way StampTE allows lazy initialization of
 	 * new Stamps as soon as they are fetched using the get() command.
-	 * 
-	 * @var array 
+	 *
+	 * @var array
 	 */
 	protected $sketchBook = array();
 
 	/**
 	 * List of slots in the current Stamp.
 	 * Mainly for introspection by smart template processors.
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $slots = array();
@@ -85,30 +85,30 @@ class StampTE
 	 * A Glue Point can be selected using a magic getter.
 	 * The ID for this magically selected Glue Point is stored in this
 	 * variable.
-	 * 
-	 * @var string 
+	 *
+	 * @var string
 	 */
 	protected $select = NULL;
 
 	/**
 	 * Cache array. Cache keeps the planet from burning up.
-	 * 
-	 * @var array 
+	 *
+	 * @var array
 	 */
 	protected $cache = array();
 
 	/**
 	 * Holds the translator function to be used for
 	 * translations.
-	 * 
+	 *
 	 * @var closure
 	 */
 	protected $translator = NULL;
 	/**
 	 * Holds the factory function to be used whenever
 	 * a Stamp template is returned.
-	 * 
-	 * @var closure 
+	 *
+	 * @var closure
 	 */
 	protected $factory = NULL;
 
@@ -129,19 +129,19 @@ class StampTE
 
 	/**
 	 * Returns a StampTE template configured with a proper
-	 * HTML 5 document using UTF-8 correct encoding (secure with 
+	 * HTML 5 document using UTF-8 correct encoding (secure with
 	 * default XSS escaping features).
-	 * 
+	 *
 	 * This default template contains two cut markers: link and script,
 	 * two glue points: head and body and one slot: title.
-	 * 
+	 *
 	 * Usage example:
-	 * 
+	 *
 	 * $tpl = StampTE::createHtml5Utf8Document();
 	 * $tpl->setTitle('Welcome to StampTE'); //set the title.
 	 * $tpl->head->add( $linkTag ); //Add stylesheets and scripts!
 	 * $tpl->body->add( $myDocument ); //Add your body content!
-	 * 
+	 *
 	 * @return StampTE template
 	 */
 	public static function createHtml5Utf8Document()
@@ -174,16 +174,16 @@ class StampTE
 	 * $stpl->getX(); //where X is cut point
 	 *
 	 * @param string $tpl HTML Template
-	 * @param string $id  identification string for this template 
+	 * @param string $id  identification string for this template
 	 */
 	public function __construct( $tpl='', $id='root' )
 	{
 		if ( is_null( $tpl ) ) $tpl = '';
-		
+
 		if ( is_object( $tpl ) && !method_exists( $tpl, '__toString' ) ) $tpl = '['.get_class( $tpl ).' instance]';
-		
+
 		$tpl = (string) $tpl;
-		
+
 		$this->id       = strval( $id );
 		$this->template = $tpl;
 		$this->matches  = array();
@@ -204,13 +204,13 @@ class StampTE
 
 		$this->template = preg_replace( '/#([^\?#]+)(\?)?#/sU', '#&$1$2#', $this->template );
 	}
-	
+
 	/**
 	 * Internal method that needs to be public because PHP is too stupid to understand
 	 * $this in closures.
-	 * 
+	 *
 	 * @param string $id
-	 * @param string $snippet 
+	 * @param string $snippet
 	 */
 	public function addToSketchBook( $id, $snippet )
 	{
@@ -220,10 +220,10 @@ class StampTE
 
 	/**
 	 * Creates an instance of StampTE template using a file.
-	 * 
+	 *
 	 * @param string $filename file containing HTML input
-	 * 
-	 * @return static 
+	 *
+	 * @return static
 	 */
 	public static function load( $filename )
 	{
@@ -234,10 +234,10 @@ class StampTE
 
 	/**
 	 * Checks whether a snippet with ID $id is in the catalogue.
-	 * 
+	 *
 	 * @param string $id identifier you are looking for
-	 * 
-	 * @return boolean $yesNo whether the snippet with this ID is available or not. 
+	 *
+	 * @return boolean $yesNo whether the snippet with this ID is available or not.
 	 */
 	public function inCatalogue( $id )
 	{
@@ -247,10 +247,10 @@ class StampTE
 	/**
 	 * Returns a new instance of StampTE configured with the template
 	 * that corresponds to the specified ID.
-	 * 
+	 *
 	 * @param string $id identifier
-	 * 
-	 * @return StampTE $snippet 
+	 *
+	 * @return StampTE $snippet
 	 */
 	public function get( $id )
 	{
@@ -272,7 +272,7 @@ class StampTE
 			$new->translator = $this->translator;
 			$new->factory    = $this->factory;
 
-			if ( isset( $parts ) ) { 
+			if ( isset( $parts ) ) {
 				return $new->get( $rest );
 			} else {
 				return $new;
@@ -287,10 +287,10 @@ class StampTE
 	 * $list needs to be a | pipe separated list of snippet IDs. The snippets
 	 * will be returned as an array so you can obtain them using the list()
 	 * statement.
-	 * 
+	 *
 	 * @param string  $list  List of IDs you want to fetch from template
-	 * 
-	 * @return array $snippets Snippets obtained from template 
+	 *
+	 * @return array $snippets Snippets obtained from template
 	 */
 	public function collect( $list )
 	{
@@ -311,7 +311,7 @@ class StampTE
 	 * to a string this function removes all HTML comments and unnecessary space.
 	 * If you don't want this use a different toString method like ->getString()
 	 *
-	 * @return string $string string representation of HTML snippet/template 
+	 * @return string $string string representation of HTML snippet/template
 	 */
 	public function __toString()
 	{
@@ -329,8 +329,8 @@ class StampTE
 
 	/**
 	 * Returns the template as a string.
-	 * 
-	 * @return string $raw raw template 
+	 *
+	 * @return string $raw raw template
 	 */
 	public function getString() {
 		return $this->template;
@@ -354,11 +354,11 @@ class StampTE
 	 *
 	 * If you pass a raw string for a conditional glue point you'll get a S003 exception.
 	 * If your Stamp object is rejected by the glue point you'll get a S102 exception.
-	 * 
+	 *
 	 * @throws StampTEException
 	 *
 	 * @param string  $what    ID of the Glue Point you want to append the contents of the snippet to.
-	 * @param StampTE|string   $snippet a StampTE snippet/template to be glued at this point 
+	 * @param StampTE|string   $snippet a StampTE snippet/template to be glued at this point
 	 *
 	 * @return StampTE $snippet self, chainable
 	 */
@@ -400,10 +400,10 @@ class StampTE
 	/**
 	 * Glues all elements in the specified array.
 	 * This is a quick way to glue multiple elements as well.
-	 * 
+	 *
 	 * @param array $map list of key=>value pairs to glue
-	 * 
-	 * @return StampTE $snippet self, chainable  
+	 *
+	 * @return StampTE $snippet self, chainable
 	 */
 	public function glueAll( $map )
 	{
@@ -421,12 +421,12 @@ class StampTE
 
 	/**
 	 * Injects a piece of data into the slot marker in the snippet/template.
-	 * 
+	 *
 	 * @param string  $where ID of the slot where to inject the data
 	 * @param string  $data  the data to inject in the slot
 	 * @param boolean $raw   if TRUE output will not be escaped
-	 * 
-	 * @return StampTE $snippet self, chainable 
+	 *
+	 * @return StampTE $snippet self, chainable
 	 */
 	public function inject( $slot, $data, $raw = FALSE )
 	{
@@ -443,12 +443,12 @@ class StampTE
 
 	/**
 	 * Injects a piece of data into an attribute slot marker in the snippet/template.
-	 * 
+	 *
 	 * @param string  $slot name of the slot where the data should be injected
 	 * @param string  $data the data to be injected in the slot
 	 * @param boolean $raw  if TRUE output will not be escaped
-	 * 
-	 * @return StampTE 
+	 *
+	 * @return StampTE
 	 */
 	public function injectAttr( $slot, $data, $raw = FALSE )
 	{
@@ -465,11 +465,11 @@ class StampTE
 
 	/**
 	 * Alias for inject($where,$data,TRUE)
-	 * 
+	 *
 	 * @param string  $where ID of the slot where to inject the data
 	 * @param string  $data  the data to inject in the slot
 	 *
-	 * @return StampTE $snippet self, chainable 
+	 * @return StampTE $snippet self, chainable
 	 */
 	public function injectRaw( $where, $data )
 	{
@@ -478,10 +478,10 @@ class StampTE
 
 	/**
 	 * Same as inject() but injects an entire array of slot->data pairs.
-	 * 
+	 *
 	 * @param array $array Array of slot->data pairs
 	 * @param boolean $raw   if TRUE output will not be escaped
-	 * 
+	 *
 	 * @return StampTE self, chainable
 	 */
 	public function injectAll( $array, $raw = FALSE )
@@ -494,8 +494,8 @@ class StampTE
 
 	/**
 	 * Returns the identifier of the current snippet/template.
-	 * 
-	 * @return string $id ID of this snippet/template 
+	 *
+	 * @return string $id ID of this snippet/template
 	 */
 	public function getID()
 	{
@@ -504,22 +504,22 @@ class StampTE
 
 	/**
 	 * Copies the current snippet/template.
-	 * 
-	 * @return StampTE $copy Copy of the current template/snippet 
+	 *
+	 * @return StampTE $copy Copy of the current template/snippet
 	 */
-	public function copy() 
+	public function copy()
 	{
 		return clone( $this );
 	}
 
 	/**
 	 * Collects a list, just like collect() but stores result in cache array.
-	 * 
-	 * @param string $list Pipe separated list of IDs. 
-	 * 
+	 *
+	 * @param string $list Pipe separated list of IDs.
+	 *
 	 * @return self
 	 */
-	public function writeToCache( $list ) 
+	public function writeToCache( $list )
 	{
 		$this->cache[$list] = $this->collect( $list );
 		return $this;
@@ -527,8 +527,8 @@ class StampTE
 
 	/**
 	 * Returns the cache object for storage to disk.
-	 * 
-	 * @return string $cache serialized cache object. 
+	 *
+	 * @return string $cache serialized cache object.
 	 */
 	public function getCache()
 	{
@@ -537,26 +537,26 @@ class StampTE
 
 	/**
 	 * Loads cache data.
-	 * 
+	 *
 	 * @param string $rawCacheData the serialized cached string as retrieved from getCache().
-	 * 
-	 * @return self 
+	 *
+	 * @return self
 	 */
 	public function loadIntoCache( $rawCacheData )
 	{
 		$this->cache = unserialize( $rawCacheData );
-		
+
 		if ( !is_array( $this->cache ) ) throw new StampTEException( '[S004] Failed to unserialize cache object.' );
-		
+
 		return $this;
 	}
 
 	/**
 	 * Filters data.
-	 * 
+	 *
 	 * @param string $string
-	 * 
-	 * @return string $string 
+	 *
+	 * @return string $string
 	 */
 	protected function filter( $data )
 	{
@@ -564,7 +564,7 @@ class StampTE
 		$filtered = htmlspecialchars( $data, ENT_QUOTES, 'UTF-8' );
 
 		$filtered = str_replace( '`', '&#96;', $filtered ); //Prevent MSIE backtick XSS hack
-		
+
 		return $filtered;
 	}
 
@@ -572,10 +572,10 @@ class StampTE
 	 * Selects a Glue Point to attach a Stamp to.
 	 * Note that although this seems like a getter this method
 	 * actually returns the same StampTE. It's both evil and beautiful at the same time.
-	 *  
+	 *
 	 * @param string $gluePoint
-	 * 
-	 * @return StampTE 
+	 *
+	 * @return StampTE
 	 */
 	public function &__get( $gluePoint )
 	{
@@ -589,7 +589,7 @@ class StampTE
 	 *				- getX(), routes to get('X')
 	 *				- setX(Y), routes to inject('X',Y)
 	 */
-	public function __call($method, $arguments) 
+	public function __call($method, $arguments)
 	{
 		if ( strpos( $method, 'get' ) === 0 ) {
 			return $this->get( lcfirst( substr( $method, 3) ) );
@@ -605,8 +605,8 @@ class StampTE
 	/**
 	 * Glues the specified Stamp object to the currently selected
 	 * Glue Point.
-	 * 
-	 * @param StampTE $stamp 
+	 *
+	 * @param StampTE $stamp
 	 */
 	public function add( StampTE $stamp )
 	{
@@ -620,45 +620,45 @@ class StampTE
 
 	/**
 	 * Sets the translator function to be used for translations.
-	 * The translator function will be called automatically as soon as you invoke the magic 
+	 * The translator function will be called automatically as soon as you invoke the magic
 	 * method:
-	 * 
+	 *
 	 * sayX(Y) where X is the slot you want to inject the contents of Y into.
-	 * 
+	 *
 	 * Note that optional arguments are allowed and passed to the translator.
-	 * 
-	 * @param closure $closure 
+	 *
+	 * @param closure $closure
 	 */
 	public function setTranslator( $closure )
 	{
 		if ( !is_callable( $closure ) ) throw new StampTEException( '[S005] Invalid Translator. Translator must be callable.' );
-		
+
 		$this->translator = $closure;
 	}
 
 	/**
 	 * Sets the object factory. If get(X) gets called StampTE will call the
-	 * factory with template and ID for X to give you the opportunity to 
+	 * factory with template and ID for X to give you the opportunity to
 	 * wrap the template object in your own wrapper class.
-	 * 
-	 * @param closure $factory 
+	 *
+	 * @param closure $factory
 	 */
 	public function setFactory( $factory )
 	{
 		if ( !is_callable( $factory ) ) throw new StampTEException( '[S006] Invalid Factory. Factory must be callable.' );
-		
+
 		$this->factory = $factory;
 	}
 
 	/**
 	 * Attr is a shortcut to quickly set an attribute.
-	 * 
+	 *
 	 * @param string  $slot  slot
 	 * @param boolean $onOff whether to fill in the slot or not
-	 * 
+	 *
 	 * @return StampTE
 	 */
-	public function attr( $slot, $onOff = TRUE ) 
+	public function attr( $slot, $onOff = TRUE )
 	{
 		return ( $onOff ) ? $this->injectAttr( $slot, $slot ) : $this;
 	}

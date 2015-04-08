@@ -307,7 +307,19 @@ class MVP
   // line 94 business-logic.ump
   public function render (&$element)
   {
-    if(!isset($element['#markup'])){
+    if(isset($element['#render'])){
+      $render = $element;
+      $file = dirname(__file__).'/../modules/'.$render['#module'].'/view/'.$render['#view'].'.php';
+      require_once $file;
+      $view = New $render['#view'];
+      $element[] = $view->{$render['#method']}($render['#args']);
+      foreach($render as $key => $val){
+        unset($element[$key]);
+      }
+      $this->render($element);
+
+    }
+    elseif(!isset($element['#markup'])){
       if(is_array($element)){
         $element['#markup'] = array();
         foreach($this->children_elements($element) as $key => $children){
@@ -331,6 +343,7 @@ class MVP
             $element['#markup'][] = $element[$key];
           }
         }
+
       }
       else{
         // $this->_log(__function__. ' element 2');
@@ -338,6 +351,7 @@ class MVP
         // $element = array('#markup'=>$element);
         return $element;
       }
+
     }
 
 

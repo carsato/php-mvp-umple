@@ -5,6 +5,19 @@ use StampTemplateEngine\StampTE as StampTE;
 class SystemView{
   public function view(){
     return array(
+      'about.html' => array(
+        'about' => array(
+          '#render' => true,
+          '#module' => 'system',
+          '#view'   => 'SystemView',
+          '#method' => 'viewAView',
+        ),
+      ),
+    );
+  }
+
+  public function viewAView(){
+    return array(
       'a_render' => array(
         '#render' => true,
         '#module' => 'system',
