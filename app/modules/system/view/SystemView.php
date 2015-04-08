@@ -51,11 +51,14 @@ class SystemView{
     // $args = reset($args);
     $template_file = $args['template_file'];
 
-    if(!$template_file){
+    $template = file_get_contents($template_file);
+    if(!$template){
       $template_file = dirname(__file__).'/../layout.html';
       $template_file = dirname(__file__).'/../../../vendor/IronSummitMedia/startbootstrap-modern-business/about.html';
+      $template = file_get_contents($template_file);
     }
-    $args['template'] = file_get_contents($template_file);
+    $args['template'] = $template;
+
 
     // print_r($args);
     $args['data'] = $args['slots'];
@@ -72,6 +75,13 @@ class SystemView{
     $args = func_get_args();
     $args = reset($args);
     $template = $args['template'];
+    if(!$template){
+      $template_file = $args['template_file'];
+      $template = file_get_contents($template_file);
+      if(!$template){
+        throw new Exception("No template or template_file for $this view", 1);
+      }
+    }
 
     $data = $args['data'];
     $se = new StampTE($template);

@@ -265,7 +265,16 @@ class MVP
     foreach($this->modules as $module){
       include dirname(__file__).'/../modules/'.$module['name'].'/view/'.$module['view'].'.php';
       $view = New $module['view'];
-      $this->views['#slots'] = array_replace_recursive($this->views['#slots'], $view->view());
+      // $this->views['#slots'] = array_replace_recursive($this->views['#slots'], $view->view());
+    }
+    foreach($this->modules as $module){
+      $view = New $module['view'];
+      $route_view_array = $view->view();
+      foreach($route_view_array as $route => $view_array){
+        if($route == $_GET['q']){
+          $this->views['#slots'] = array_replace_recursive($this->views['#slots'], $view_array);
+        }
+      }
     }
     $this->render($this->views['#slots']);
 
