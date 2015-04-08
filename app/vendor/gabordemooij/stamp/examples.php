@@ -27,13 +27,13 @@ $data = array(
 
 $priceList = new StampTE($t);
 
-$dish = $priceList->getPizza();
+$dish = $priceList->getPizza(); 
 
 foreach($data as $name=>$price) {
-	$pizza = $dish->copy();
+	$pizza = $dish->copy(); 
 	$pizza->setName($name);
 	$pizza->setPrice($price);
-	$priceList->add( $pizza );
+	$priceList->add( $pizza ); 
 }
 
 echo $priceList;

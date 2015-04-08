@@ -8,7 +8,7 @@ class SystemView{
       'a_render' => array(
         '#render' => true,
         '#module' => 'system',
-        '#view'   => 'SystemView',
+        '#view'   => __class__,
         '#method' => 'stampteRender',
         '#args' => array(
           'template' => "<table>
@@ -36,20 +36,32 @@ class SystemView{
               'name' => 'Margherita',
               'price' => '2.2',
               ),
+            array(
+              'pizza',
+              'name' => 'Margherita',
+              'price' => '3.2',
+              ),
           ),
         ),
       ),
     );
   }
-  public function layoutRender(){
-    $template_file = dirname(__file__).'/layout.html';
-    $args = func_get_args();
-    $args = reset($args);
-    // print_r($args);
+
+  public function layoutRender($args){
+    // $args = reset($args);
+    $template_file = $args['template_file'];
+
+    if(!$template_file){
+      $template_file = dirname(__file__).'/../layout.html';
+      $template_file = dirname(__file__).'/../../../vendor/IronSummitMedia/startbootstrap-modern-business/about.html';
+    }
     $args['template'] = file_get_contents($template_file);
+
+    // print_r($args);
     $args['data'] = $args['slots'];
     return $this->stampteLayoutRender($args);
   }
+
   public function basicRender($string){
     return $string;
   }

@@ -1,0 +1,30 @@
+class ViewEngine{
+  sm{
+    view {
+      viewInfo {
+        request -> viewStatus;
+      }
+      viewStatus{
+        viewEnabled{
+          disable->viewDisabled;
+          requestData -> dataInfo;
+        }
+        viewDisabled{
+          enable->viewEnabled;
+          returnFalse -> viewInfo;
+        }
+      }
+    }
+    data{
+      dataInfo{
+        requestData -> dataRequested;
+      }
+      dataRequested{
+        provideData -> dataProvided;
+      }
+      dataProvided{
+        returnData -> viewInfo;
+      }
+    }
+  }
+}

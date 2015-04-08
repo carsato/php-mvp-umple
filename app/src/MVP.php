@@ -97,7 +97,7 @@ class MVP
   public function run()
   {
     $wasEventProcessed = false;
-    
+
     $aStatus = $this->status;
     if ($aStatus == self::$StatusListening)
     {
@@ -111,7 +111,7 @@ class MVP
   public function processRequest()
   {
     $wasEventProcessed = false;
-    
+
     $aStatus = $this->status;
     if ($aStatus == self::$StatusRequested)
     {
@@ -124,7 +124,7 @@ class MVP
   public function returnRequest()
   {
     $wasEventProcessed = false;
-    
+
     $aStatus = $this->status;
     if ($aStatus == self::$StatusRequested)
     {
@@ -137,7 +137,7 @@ class MVP
   public function notify()
   {
     $wasEventProcessed = false;
-    
+
     $aStatus = $this->status;
     if ($aStatus == self::$StatusView)
     {
@@ -150,7 +150,7 @@ class MVP
   public function display()
   {
     $wasEventProcessed = false;
-    
+
     $aStatus = $this->status;
     if ($aStatus == self::$StatusView)
     {
@@ -163,7 +163,7 @@ class MVP
   public function updateModel()
   {
     $wasEventProcessed = false;
-    
+
     $aStatus = $this->status;
     if ($aStatus == self::$StatusPresenter)
     {
@@ -176,7 +176,7 @@ class MVP
   public function updateView()
   {
     $wasEventProcessed = false;
-    
+
     $aStatus = $this->status;
     if ($aStatus == self::$StatusPresenter)
     {
@@ -189,7 +189,7 @@ class MVP
   public function getData()
   {
     $wasEventProcessed = false;
-    
+
     $aStatus = $this->status;
     if ($aStatus == self::$StatusPresenter)
     {
@@ -282,6 +282,7 @@ class MVP
       '#method' => 'layoutRender',
       '#args'   => array(
         'slots' => $this->views['#slots'],
+        'template_file' => dirname(__file__).'/../vendor/IronSummitMedia/startbootstrap-modern-business/'.$_GET['q'],
       ),
     );
     $file = dirname(__file__).'/../modules/'.$render['#module'].'/view/'.$render['#view'].'.php';
@@ -293,9 +294,9 @@ class MVP
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
-  
+
   // line 94 business-logic.ump
-  public function render (&$element) 
+  public function render (&$element)
   {
     if(!isset($element['#markup'])){
       if(is_array($element)){
@@ -341,7 +342,7 @@ class MVP
   }
 
 // line 138 business-logic.ump
-  public function children_elements ($elements) 
+  public function children_elements ($elements)
   {
     $children = array();
     foreach($elements as $key => $element){
@@ -354,7 +355,7 @@ class MVP
   }
 
 // line 149 business-logic.ump
-  public function _log ($var) 
+  public function _log ($var)
   {
     if(isset($_GET['log']) && $_GET['log'] == 1){
       print '<pre>'.print_r($var,true).'</pre>';

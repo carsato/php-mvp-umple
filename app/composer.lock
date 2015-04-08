@@ -1,0 +1,40 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "c72a6b8547096efbe1598eae83d4f581",
+    "packages": [
+        {
+            "name": "IronSummitMedia/startbootstrap-modern-business",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/IronSummitMedia/startbootstrap-modern-business.git",
+                "reference": "master"
+            },
+            "type": "library",
+            "time": "2015-03-03 06:08:54"
+        },
+        {
+            "name": "gabordemooij/stamp",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gabordemooij/stamp.git",
+                "reference": "master"
+            },
+            "type": "library",
+            "time": "2015-03-11 19:20:20"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
