@@ -66,7 +66,16 @@ class MVP
     foreach($this->modules as $module){
       include dirname(__file__).'/../modules/'.$module['name'].'/view/'.$module['view'].'.php';
       $view = New $module['view'];
-      $this->views['#slots'] = array_replace_recursive($this->views['#slots'], $view->view());
+      // $this->views['#slots'] = array_replace_recursive($this->views['#slots'], $view->view());
+    }
+    foreach($this->modules as $module){
+      $view = New $module['view'];
+      $route_view_array = $view->view();
+      foreach($route_view_array as $route => $view_array){
+        if($route == $_GET['q']){
+          $this->views['#slots'] = array_replace_recursive($this->views['#slots'], $view_array);
+        }
+      }
     }
     $this->render($this->views['#slots']);
 
@@ -83,6 +92,7 @@ class MVP
       '#method' => 'layoutRender',
       '#args'   => array(
         'slots' => $this->views['#slots'],
+        'template_file' => dirname(__file__).'/../vendor/IronSummitMedia/startbootstrap-modern-business/'.$_GET['q'],
       ),
     );
     $file = dirname(__file__).'/../modules/'.$render['#module'].'/view/'.$render['#view'].'.php';
@@ -92,7 +102,19 @@ class MVP
   }
 
   public function render(&$element){
-    if(!isset($element['#markup'])){
+    if(isset($element['#render'])){
+      $render = $element;
+      $file = dirname(__file__).'/../modules/'.$render['#module'].'/view/'.$render['#view'].'.php';
+      require_once $file;
+      $view = New $render['#view'];
+      $element[] = $view->{$render['#method']}($render['#args']);
+      foreach($render as $key => $val){
+        unset($element[$key]);
+      }
+      $this->render($element);
+
+    }
+    elseif(!isset($element['#markup'])){
       if(is_array($element)){
         $element['#markup'] = array();
         foreach($this->children_elements($element) as $key => $children){
@@ -116,6 +138,7 @@ class MVP
             $element['#markup'][] = $element[$key];
           }
         }
+
       }
       else{
         // $this->_log(__function__. ' element 2');
@@ -123,6 +146,7 @@ class MVP
         // $element = array('#markup'=>$element);
         return $element;
       }
+
     }
 
 
