@@ -49,8 +49,11 @@ class MVP
       }
     }
   }
+}
 
-  public function getModulesList(){
+
+class MVP{
+    public function getModulesList(){
     $this->modules = array();
     foreach(glob(dirname(__file__)."/../modules/*/config/config.php") as $module){
     // foreach(glob(dirname(__file__)."/../modules/*/Module.php") as $module){
@@ -176,5 +179,3 @@ class MVP
     }
   }
 }
-
-

@@ -97,7 +97,7 @@ class MVP
   public function run()
   {
     $wasEventProcessed = false;
-
+    
     $aStatus = $this->status;
     if ($aStatus == self::$StatusListening)
     {
@@ -111,7 +111,7 @@ class MVP
   public function processRequest()
   {
     $wasEventProcessed = false;
-
+    
     $aStatus = $this->status;
     if ($aStatus == self::$StatusRequested)
     {
@@ -124,7 +124,7 @@ class MVP
   public function returnRequest()
   {
     $wasEventProcessed = false;
-
+    
     $aStatus = $this->status;
     if ($aStatus == self::$StatusRequested)
     {
@@ -137,7 +137,7 @@ class MVP
   public function notify()
   {
     $wasEventProcessed = false;
-
+    
     $aStatus = $this->status;
     if ($aStatus == self::$StatusView)
     {
@@ -150,7 +150,7 @@ class MVP
   public function display()
   {
     $wasEventProcessed = false;
-
+    
     $aStatus = $this->status;
     if ($aStatus == self::$StatusView)
     {
@@ -163,7 +163,7 @@ class MVP
   public function updateModel()
   {
     $wasEventProcessed = false;
-
+    
     $aStatus = $this->status;
     if ($aStatus == self::$StatusPresenter)
     {
@@ -176,7 +176,7 @@ class MVP
   public function updateView()
   {
     $wasEventProcessed = false;
-
+    
     $aStatus = $this->status;
     if ($aStatus == self::$StatusPresenter)
     {
@@ -189,7 +189,7 @@ class MVP
   public function getData()
   {
     $wasEventProcessed = false;
-
+    
     $aStatus = $this->status;
     if ($aStatus == self::$StatusPresenter)
     {
@@ -303,9 +303,9 @@ class MVP
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
-
-  // line 94 business-logic.ump
-  public function render (&$element)
+  
+  // line 107 business-logic.ump
+  public function render (&$element) 
   {
     if(isset($element['#render'])){
       $render = $element;
@@ -364,8 +364,8 @@ class MVP
     return $element['#markup'];
   }
 
-// line 138 business-logic.ump
-  public function children_elements ($elements)
+// line 165 business-logic.ump
+  public function children_elements ($elements) 
   {
     $children = array();
     foreach($elements as $key => $element){
@@ -377,8 +377,8 @@ class MVP
     return $children;
   }
 
-// line 149 business-logic.ump
-  public function _log ($var)
+// line 176 business-logic.ump
+  public function _log ($var) 
   {
     if(isset($_GET['log']) && $_GET['log'] == 1){
       print '<pre>'.print_r($var,true).'</pre>';
