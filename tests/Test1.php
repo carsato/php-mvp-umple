@@ -8,6 +8,8 @@ Class MVPTest extends PHPUnit_Framework_TestCase{
 
     $this->assertInstanceOf('MVP', $mvp, 'Not MVP instance');
 
+    $mvp = New MVP();
+    $mvp->bootstrap();
     $hasResponse = $mvp->run();
     $response = $mvp->getResponse();
 
