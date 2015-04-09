@@ -21,7 +21,7 @@ class SystemView{
       'a_render' => array(
         '#render' => true,
         '#module' => 'system',
-        '#view'   => __class__,
+        '#view'   => 'SystemView',
         '#method' => 'stampteRender',
         '#args' => array(
           'template' => "<table>
